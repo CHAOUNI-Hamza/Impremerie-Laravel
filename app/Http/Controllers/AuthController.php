@@ -190,15 +190,7 @@ return redirect()->to('http://localhost:5173/auth/facebook/callback?token=' . $t
     }
 
     public function forgotpassword(Request $request) {
-        $request->validate(['email' => 'required|email']);
-
-        $status = Password::sendResetLink($request->only('email'));
-
-        return $status === Password::RESET_LINK_SENT
-            ? response()->json(['message' => __('passwords.sent')], 200)
-            : response()->json(['message' => __('passwords.user')], 400);
-
-        /*$emailNotExists = User::where('email', $request->email)->exists();
+        $emailNotExists = User::where('email', $request->email)->exists();
     if(!$emailNotExists) {
         return response()->json(['emailNotExists' => "Cet email n'existe pas"], 409);
     }
@@ -219,29 +211,11 @@ return redirect()->to('http://localhost:5173/auth/facebook/callback?token=' . $t
     
         throw ValidationException::withMessages([
             'email' => [trans($status)]
-        ]);*/
+        ]);
     }
 
     public function resetpassword(Request $request) {
         $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|confirmed|min:8',
-            'token' => 'required',
-        ]);
-
-        $status = Password::reset(
-            $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) {
-                $user->forceFill([
-                    'password' => bcrypt($password),
-                ])->save();
-            }
-        );
-
-        return $status === Password::PASSWORD_RESET
-            ? response()->json(['message' => __('passwords.reset')], 200)
-            : response()->json(['message' => __('passwords.token')], 400);
-        /*$request->validate([
             'token' => 'required',
             'email' => 'required|email',
             'password' => ['required', 'confirmed', RulesPassword::defaults()],
@@ -269,6 +243,6 @@ return redirect()->to('http://localhost:5173/auth/facebook/callback?token=' . $t
     
         return response([
             'error'=> 'Vérifiez vos informations'
-        ], 500);*/
+        ], 500);
     }
 }

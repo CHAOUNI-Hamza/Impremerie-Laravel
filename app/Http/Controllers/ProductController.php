@@ -107,10 +107,16 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    /*public function show(Product $product)
     {
         return new ProductResource($product);
+    }*/
+    public function show($slug)
+    {
+        $product = Product::where('slug', $slug)->firstOrFail();
+        return new ProductResource($product);
     }
+
 
     /**
      * Update the specified resource in storage.

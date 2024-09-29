@@ -28,7 +28,6 @@ class CommandeController extends Controller
      */
     public function store(StoreCommandeRequest $request)
     {
-
         $commande = new Commande();
         $commande->statut = $request->input('statut');
         $commande->user_id = auth()->user()->id;
